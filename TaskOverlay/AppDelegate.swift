@@ -220,8 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             inputField.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 8),
             inputField.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -10),
-            inputField.centerYAnchor.constraint(equalTo: inputContainer.centerYAnchor),
-            inputField.heightAnchor.constraint(equalToConstant: inputHeight)
+            inputField.centerYAnchor.constraint(equalTo: inputContainer.centerYAnchor)
         ])
     }
 
