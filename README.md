@@ -1,4 +1,4 @@
-# TaskOverlay
+# Cue
 
 Un overlay flotante para macOS que te ayuda a recordar en qué estás trabajando.
 
@@ -56,7 +56,7 @@ Las tareas completadas se muestran con tachado y se ordenan al final.
 
 ## Cómo usar
 
-1. Abre `TaskOverlay.xcodeproj` en Xcode
+1. Abre `Cue.xcodeproj` en Xcode
 2. Selecciona tu Team de desarrollo en Signing & Capabilities (o desactiva code signing para pruebas locales)
 3. Pulsa `⌘R` para compilar y ejecutar
 4. El overlay aparecerá arriba a la izquierda
@@ -81,12 +81,12 @@ Puedes modificar fácilmente en `AppDelegate.swift`:
 ## Estructura del proyecto
 
 ```
-TaskOverlay/
-├── TaskOverlay.xcodeproj/
-└── TaskOverlay/
+Cue/
+├── Cue.xcodeproj/
+└── Cue/
     ├── AppDelegate.swift    # Toda la lógica de la app
     ├── Info.plist           # Configuración (LSUIElement=true para no aparecer en Dock)
-    └── TaskOverlay.entitlements
+    └── Cue.entitlements
 ```
 
 ## Historial de cambios

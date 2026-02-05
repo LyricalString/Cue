@@ -232,7 +232,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         headerView.wantsLayer = true
         
         // Title on the left
-        titleLabel = NSTextField(labelWithString: "Tasks")
+        titleLabel = NSTextField(labelWithString: "Cue")
         titleLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
         titleLabel.textColor = NSColor.secondaryLabelColor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -487,7 +487,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.title = ""
         }
         
-        button.image = NSImage(systemSymbolName: "checklist", accessibilityDescription: "Task Overlay")
+        button.image = NSImage(systemSymbolName: "checklist", accessibilityDescription: "Cue")
         button.imagePosition = .imageLeft
     }
 
