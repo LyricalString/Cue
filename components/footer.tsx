@@ -3,7 +3,6 @@ export function Footer() {
     <footer className="border-t border-border py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
               <span className="font-mono font-bold text-primary-foreground text-xs">
@@ -13,7 +12,6 @@ export function Footer() {
             <span className="font-semibold text-foreground">Cue</span>
           </div>
 
-          {/* Links */}
           <nav className="flex items-center gap-6 text-sm">
             <a
               href="#"
@@ -35,7 +33,6 @@ export function Footer() {
             </a>
           </nav>
 
-          {/* Copyright */}
           <p className="text-sm text-muted-foreground font-mono">
             <span className="text-primary">{">"}</span> 2026 Cue. Todos los
             derechos reservados.
@@ -43,5 +40,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }
