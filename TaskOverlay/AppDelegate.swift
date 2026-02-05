@@ -30,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var containerView: TaskContainerView!
     var inputField: NSTextField!
+    var inputContainer: NSView!
     var headerView: NSView!
     var positionLabel: NSTextField!
     var scrollUpIndicator: NSImageView!
@@ -140,12 +141,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         containerView = TaskContainerView(frame: NSRect(x: 0, y: 0, width: panelWidth, height: 100))
-        containerView.material = .hudWindow
+        containerView.material = .popover
         containerView.state = .active
         containerView.wantsLayer = true
-        containerView.layer?.cornerRadius = 12
+        containerView.layer?.cornerRadius = 10
         containerView.layer?.masksToBounds = true
-        containerView.alphaValue = 0.96
+        containerView.alphaValue = 0.98
+        
+        // Subtle border for definition
+        containerView.layer?.borderWidth = 0.5
+        containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.15).cgColor
 
         setupInputField()
         setupHeaderView()
@@ -170,52 +175,90 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var tasksContainerHeightConstraint: NSLayoutConstraint!
     
     func setupInputField() {
+        // Create a container for the input field with icon
+        inputContainer = NSView()
+        inputContainer.translatesAutoresizingMaskIntoConstraints = false
+        inputContainer.wantsLayer = true
+        inputContainer.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(0.3).cgColor
+        inputContainer.layer?.cornerRadius = 8
+        
+        // Plus icon
+        let icon = NSImageView()
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        icon.image = NSImage(systemSymbolName: "plus", accessibilityDescription: nil)
+        icon.contentTintColor = NSColor.tertiaryLabelColor
+        
         inputField = NSTextField()
-        inputField.placeholderString = "Nueva tarea... (A/M/B prioridad)"
+        inputField.placeholderString = "Añadir tarea..."
         inputField.font = NSFont.systemFont(ofSize: 14, weight: .medium)
         inputField.isBordered = false
-        inputField.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(0.3)
+        inputField.backgroundColor = .clear
         inputField.focusRingType = .none
-        inputField.wantsLayer = true
-        inputField.layer?.cornerRadius = 8
         inputField.delegate = self
         inputField.translatesAutoresizingMaskIntoConstraints = false
-        inputField.alphaValue = 0.0
         inputField.setAccessibilityLabel("Campo de nueva tarea")
         
-        containerView.addSubview(inputField)
+        inputContainer.addSubview(icon)
+        inputContainer.addSubview(inputField)
+        containerView.addSubview(inputContainer)
         
-        inputFieldHeightConstraint = inputField.heightAnchor.constraint(equalToConstant: 0)
+        // Keep reference to container for hiding/showing
+        inputContainer.alphaValue = 0.0
+        
+        inputFieldHeightConstraint = inputContainer.heightAnchor.constraint(equalToConstant: 0)
         
         NSLayoutConstraint.activate([
-            inputField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            inputField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            inputField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
-            inputFieldHeightConstraint
+            inputContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            inputContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
+            inputContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
+            inputFieldHeightConstraint,
+            
+            icon.leadingAnchor.constraint(equalTo: inputContainer.leadingAnchor, constant: 10),
+            icon.centerYAnchor.constraint(equalTo: inputContainer.centerYAnchor),
+            icon.widthAnchor.constraint(equalToConstant: 14),
+            icon.heightAnchor.constraint(equalToConstant: 14),
+            
+            inputField.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 8),
+            inputField.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -10),
+            inputField.centerYAnchor.constraint(equalTo: inputContainer.centerYAnchor),
+            inputField.heightAnchor.constraint(equalToConstant: inputHeight)
         ])
     }
 
+    var titleLabel: NSTextField!
+    
     func setupHeaderView() {
         headerView = NSView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.wantsLayer = true
         
+        // Title on the left
+        titleLabel = NSTextField(labelWithString: "Tasks")
+        titleLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
+        titleLabel.textColor = NSColor.secondaryLabelColor
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Counter on the right
         positionLabel = NSTextField(labelWithString: "0/0")
         positionLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .medium)
         positionLabel.textColor = NSColor.tertiaryLabelColor
         positionLabel.alignment = .right
         positionLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        headerView.addSubview(titleLabel)
         headerView.addSubview(positionLabel)
         containerView.addSubview(headerView)
         
-        headerTopConstraint = headerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8)
+        headerTopConstraint = headerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
         
         NSLayoutConstraint.activate([
             headerTopConstraint,
             headerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 18),
+            headerView.heightAnchor.constraint(equalToConstant: 20),
+            
+            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 14),
+            titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             
             positionLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -14),
             positionLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
@@ -349,7 +392,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             ])
             
             if let last = lastRow {
-                constraints.append(row.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 2))
+                constraints.append(row.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 1))
+                
+                // Add subtle separator line between rows
+                let separator = NSView()
+                separator.translatesAutoresizingMaskIntoConstraints = false
+                separator.wantsLayer = true
+                separator.layer?.backgroundColor = NSColor.systemGray.withAlphaComponent(0.08).cgColor
+                tasksContainer.addSubview(separator)
+                
+                constraints.append(contentsOf: [
+                    separator.leadingAnchor.constraint(equalTo: tasksContainer.leadingAnchor, constant: 40),
+                    separator.trailingAnchor.constraint(equalTo: tasksContainer.trailingAnchor, constant: -10),
+                    separator.heightAnchor.constraint(equalToConstant: 0.5),
+                    separator.bottomAnchor.constraint(equalTo: row.topAnchor, constant: 0.5)
+                ])
             } else {
                 constraints.append(row.topAnchor.constraint(equalTo: tasksContainer.topAnchor))
             }
@@ -609,7 +666,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         isShowingInput = true
         inputFieldHeightConstraint.constant = inputHeight
         headerTopConstraint.constant = inputHeight + 14
-        inputField.alphaValue = 1.0
+        inputContainer.alphaValue = 1.0
         inputField.stringValue = initialText
         resizePanel()
         panel.makeFirstResponder(inputField)
@@ -620,7 +677,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         isShowingInput = false
         inputFieldHeightConstraint.constant = 0
         headerTopConstraint.constant = 8
-        inputField.alphaValue = 0.0
+        inputContainer.alphaValue = 0.0
         inputField.stringValue = ""
         resizePanel()
         panel.makeFirstResponder(containerView)
