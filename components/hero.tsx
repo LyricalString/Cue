@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
 export function Hero() {
@@ -30,21 +29,14 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button
-            size="lg"
-            className="glow-primary bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-semibold"
-          >
+          <button className="glow-primary inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 text-base font-semibold rounded-md transition-colors">
             Comenzar gratis
             <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-border hover:bg-secondary px-8 py-6 text-base"
-          >
+          </button>
+          <button className="inline-flex items-center justify-center border border-border text-foreground hover:bg-secondary px-8 py-4 text-base rounded-md transition-colors">
             <span className="font-mono text-muted-foreground mr-2">$</span>
             Ver demo
-          </Button>
+          </button>
         </div>
 
         <p className="mt-12 text-sm text-muted-foreground">

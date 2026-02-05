@@ -1,7 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-
 export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
@@ -37,19 +35,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <button className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md transition-colors">
             Iniciar sesion
-          </Button>
-          <Button
-            size="sm"
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
+          </button>
+          <button className="px-3 py-2 text-sm bg-primary text-primary-foreground hover:bg-primary/90 rounded-md transition-colors">
             Comenzar
-          </Button>
+          </button>
         </div>
       </div>
     </header>

@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
 export function CTA() {
@@ -27,13 +26,10 @@ export function CTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                className="glow-primary bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-semibold"
-              >
+              <button className="glow-primary inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 text-base font-semibold rounded-md transition-colors">
                 Crear cuenta gratis
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              </button>
             </div>
 
             <p className="mt-8 text-sm text-muted-foreground">
